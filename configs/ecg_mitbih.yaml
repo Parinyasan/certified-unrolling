@@ -1,0 +1,13 @@
+common:
+  n_sig: 512
+  records_train: ["100", "101", "112", "115", "121", "123", "213"]
+  records_test: ["103", "117", "220"]
+  noise: bw+ma
+  n_train: 6400
+  n_test: 500
+  head: {type: lista_cp, K: 8, target: xhat, steps_per_stage: 300, lr: 5.0e-4, batch: 64}
+  eps_tol_rel: [1.0e-2, 1.0e-3, 1.0e-4]
+variants:
+  ecg_compressive:          {dictionary: db4, measurement: gaussian, m_frac: 0.5, snr_db: 20, lam: 0.02, eps_rel: 1.0e-2}
+  ecg_denoise_overcomplete: {dictionary: db4+dct, measurement: identity, snr_db: 10, lam: 0.02, eps_rel: 1.0e-2}
+  ecg_denoise_orthogonal:   {dictionary: db4, measurement: identity, snr_db: 10, lam: 0.02, eps_rel: 0.0}

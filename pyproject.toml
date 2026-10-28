@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "certified-unrolling"
+version = "1.0.0"
+description = "Certified adaptive-depth unrolling for sparse inverse problems"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "numba>=0.60",
+  "torch>=2.1",
+  "pyyaml>=6.0",
+  "matplotlib>=3.8",
+  "PyWavelets>=1.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+ecg = ["wfdb>=4.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+addopts = "-ra --durations=5"

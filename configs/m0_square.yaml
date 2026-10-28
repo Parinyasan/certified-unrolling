@@ -1,0 +1,18 @@
+seed: [0]
+problem:
+  m: 500
+  n: 500
+  A: {type: conditioned, kappa: 3.0}
+  sparsity_p: 0.10
+  amplitude: {type: gaussian, std: 1.0}
+  snr_db: 30
+  lam: 0.1
+  eps_rel: 0.0
+tail:
+  type: elastic_net_ista
+  mu: auto
+  eps_tol_rel: [1.0e-2, 1.0e-3, 1.0e-4]
+  max_iter: 100000
+eval:
+  n_test: 200
+  dtype_tail: float64

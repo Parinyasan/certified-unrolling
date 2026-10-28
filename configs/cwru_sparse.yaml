@@ -1,0 +1,13 @@
+common:
+  fs: 12000
+  n_sig: 1024
+  atom: {type: damped_sinusoid, tau_ms: 0.5, f_res: welch_peak_500_5500Hz}
+  lam: 0.1
+  eps_rel: 1.0e-2
+  n_train: 6400
+  n_test: 500
+  head: {type: lista_cp, K: 8, target: xhat, steps_per_stage: 300}
+  metrics: [k_star, fault_band_energy_ratio_bandlimited_5harm_3Hz, excess_kurtosis]
+variants:
+  cwru_or007: {file: "130", label: OR007@6, rpm: 1797, fault_freq: BPFO}
+  cwru_ir007: {file: "105", label: IR007,   rpm: 1797, fault_freq: BPFI}

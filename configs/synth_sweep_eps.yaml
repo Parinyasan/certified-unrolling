@@ -1,0 +1,6 @@
+base: configs/synth_base.yaml
+eps_rel_sweep: [0.0, 1.0e-4, 1.0e-3, 1.0e-2, 1.0e-1]
+eps_tol_rel: [1.0e-2, 1.0e-3, 1.0e-4]
+warm_start_head: cp_K8_xhat
+n_test: 1000
+seeds: [0, 1, 2, 3, 4]
