@@ -17,6 +17,7 @@ def test_synthetic_loader_shapes_and_snr():
     snr = 10 * np.log10(np.sum(A.matvec(X) ** 2, 1) / np.sum((Y - A.matvec(X)) ** 2, 1))
     assert abs(snr.mean() - 30) < 0.5
     assert meta["lam"].shape == (400,) and meta["eps"] > 0
+
     _, Y2, _, _ = load_synthetic(cfg, 400, seed=3)
     assert np.array_equal(Y, Y2)
 
@@ -31,6 +32,23 @@ def test_ecg_loader():
     assert np.allclose(snr, 10.0, atol=1e-6)
     assert np.allclose(meta["S"], X @ meta["Psi"].T, atol=1e-10)
     assert set(meta["records"]) <= {"103", "117", "220"}
+
+
+def test_cwru_split_before_windowing(monkeypatch):
+    import cu.data.cwru as cwru
+
+    L, n = 30_000, 1024
+    raw = np.arange(L, dtype=float) ** 2
+    monkeypatch.setattr(cwru, "load_raw", lambda fid: raw)
+    cut = int(0.7 * L)
+
+    def starts(hop, split):
+        _, Y, _, _ = cwru.load_cwru(dict(file="130", n_sig=n, hop=hop, f_res=3000.0), 10_000, 0, split)
+        return np.rint(((Y[:, 1] - Y[:, 0]) * raw.std() - 1) / 2).astype(int)
+
+    native, dense, test = starts(512, "train"), starts(16, "train"), starts(512, "test")
+    assert len(dense) > 20 * len(native) and np.all(np.diff(dense) == 16)
+    assert max(native.max(), dense.max()) + n <= cut <= test.min()
 
 
 @pytest.mark.skipif(not (CACHE / "cwru").exists(), reason="CWRU cache absent (needs network)")
